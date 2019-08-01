@@ -1,16 +1,28 @@
+body
+{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
 #tetris
 {
-    display: grid;
-    /* grid-template-columns: repeat(10fr);
-    grid-template-rows: repeat(24fr); 
-    ^needs to be fixxed*/
+    display: block;
+    grid-template-columns: repeat(10,1fr);
+    grid-template-rows: repeat(20,1fr); 
     background-color: rgb(55, 59, 59);
     border: 5px solid black;
-    grid-gap: 1vmin;
+    grid-gap: 1px;
 }
 .grid-square
 {
-    background-color: rgb(75, 79, 79);
-    border: 2px solid rgb(55, 59, 59);
+    border: 1px solid rgb(55, 59, 59);
     border-radius: 20%;
+    height: 20px;
+    width: 20px;
+}
+#start-game
+{
+ border: 3px solid rgb(100, 247, 59);
+ color: rgb(59, 247, 235);
+ font-size: 78px;
 }
