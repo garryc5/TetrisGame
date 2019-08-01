@@ -1,0 +1,16 @@
+#tetris
+{
+    display: grid;
+    /* grid-template-columns: repeat(10fr);
+    grid-template-rows: repeat(24fr); 
+    ^needs to be fixxed*/
+    background-color: rgb(55, 59, 59);
+    border: 5px solid black;
+    grid-gap: 1vmin;
+}
+.grid-square
+{
+    background-color: rgb(75, 79, 79);
+    border: 2px solid rgb(55, 59, 59);
+    border-radius: 20%;
+}
