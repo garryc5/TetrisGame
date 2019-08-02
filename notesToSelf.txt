@@ -1,2 +1,0 @@
-boardarry[0-3][x]==buffer
-displayed board starts at boardarry[4][0]

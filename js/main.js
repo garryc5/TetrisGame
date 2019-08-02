@@ -6,15 +6,26 @@ const Colors =
 {
     0 : 'rgb(75,79,79)',
     1 : 'rgb(245,245,245)',
-    2 : 'rgb(245,245,245)'
+    2 : 'rgb(145,245,145)'
 };
+const Objects=
+{
+    1:
+    {
+        x:[1,1,0,0],
+        y:[4,5,4,5],
+        ymin : 1,
+        ymax : 2,
+        name: 'square'
+    },
+}
 /*----- app's state (variables) -----*/ 
-let level,score, boardArry, dropX, leftRight, leftRightBuffer;
+let level,score, boardArry,currentDroppingObj, leftRightBuffer, dropBuffer;
 var timer;
 /*----- cached element references -----*/ 
 
 /*----- event listeners -----*/ 
-document.addEventListener('keypress',handleKeys);
+document.addEventListener('keypress',controller);
 /*----- functions -----*/
 function intal()
 {
@@ -26,12 +37,11 @@ function intal()
     boardArry[x].fill(0,0,10);
     }
     score = 0;
-    leftRight = 4;
-    dropX = 1;
     leftRightBuffer=0;
-    startGame();
-    timer();
+    currentDroppingObj =setObject(1);
+    displayBoard();
     render();
+    timer();
 }
 
 function render()
@@ -45,7 +55,7 @@ function render()
     }
 }
 
-function startGame()
+function displayBoard()
 {
     grab('start-game').style.display='none';
     grab('tetris').style.display='grid';
@@ -67,25 +77,49 @@ function grab(name)
 {
     return document.getElementById(name);
 }
-function play()
-{
-if(dropX>22){return}
-else{
-boardArry[dropX][leftRight]=0;
-dropX++;
-leftRight+=leftRightBuffer;
-leftRightBuffer =0;
-boardArry[dropX][leftRight]=1;
-render();
-}
-}
+
 function timer()
 {
  timer = setInterval(play,525-(level*25));
 }
-function handleKeys(e)
+function controller(e)
 {
     console.log(e.code);
-if(e.code=="KeyA"){leftRight>0 ? leftRightBuffer=-1 : leftRightBuffer=0}
-if(e.code=="KeyD"){leftRight<9 ? leftRightBuffer=1 : leftRightBuffer=0}
+if(e.code=="KeyA"){currentDroppingObj['y'][currentDroppingObj.ymin]>0 ? leftRightBuffer=-1 : leftRightBuffer=0}
+if(e.code=="KeyD"){currentDroppingObj['y'][currentDroppingObj.ymin]<9 ? leftRightBuffer=1 : leftRightBuffer=0}
+}
+
+
+
+// functions that still need work
+function dropper(obj)
+{
+//add checker to setOnes and add a colide detector
+for(let x=0;x<4;x++)
+{
+    obj['y']=obj['y'].map(y =>y+leftRightBuffer);
+}
+if(dropBuffer)
+{
+    for(let x=0;x<4;x++)
+    {
+        boardArry[obj['x'][x]][obj['y'][x]]=0;
+    }    
+    obj['x'] = obj['x'].map(x =>x+1);
+    for(let x=0;x<4;x++)
+    {
+        boardArry[obj['x'][x]][obj['y'][x]]=1;
+    }
+}
+    dropBuffer=!dropBuffer;
+}
+function setObject(x)
+{
+    //add rng to pick obj remove x
+    return Objects[x];
+}
+function play()
+{
+    dropper(currentDroppingObj);
+    render();
 }
