@@ -10,59 +10,54 @@ const Colors =
 };
 const Objects=
 {
+    0:
+    {
+        x:[0,1,2,3],
+        y:[4,4,4,4],
+        name: 'line'
+    },
     1:
     {
         x:[1,1,0,0],
         y:[4,5,4,5],
-        ymin : 0,
-        ymax : 1,
         name: 'square'
     },
     2:
     {
         x:[1,1,0,0],
         y:[4,5,5,6],
-        ymin : 0,
-        ymax : 3,
         name: 'fw-z'
     },
     3:
     {
         x:[1,1,0,0],
         y:[5,4,4,3],
-        ymin : 3,
-        ymax : 0,
         name: 'bw-z'
     },
     4:
     {
         x:[2,2,1,0],
         y:[5,4,4,4],
-        ymin : 1,
-        ymax : 0,
         name: 'fw-l'
     },
     5:
     {
         x:[2,2,1,0],
         y:[3,4,4,4],
-        ymin : 0,
-        ymax : 3,
         name: 'bc-l'
     },
     6:
     {
         x:[1,1,1,0],
         y:[3,4,5,4],
-        ymin : 0,
-        ymax : 2,
         name: 't'
     },
 
 }
 /*----- app's state (variables) -----*/ 
-let level,score, boardArry,currentDroppingObj, leftRightBuffer, dropBuffer, rng,collision;
+let lines,score,boardArry, leftRightBuffer, dropBuffer, rng,collision;
 var timer;
+let currentDroppingObj= {};
 /*----- cached element references -----*/ 
 
 /*----- event listeners -----*/ 
@@ -70,7 +65,7 @@ document.addEventListener('keypress',controller);
 /*----- functions -----*/
 function intal()
 {
-    level = 1;
+    lines = 1;
     boardArry= new Array(24);
     for(let x=0;x<24;x++)
     {
@@ -83,10 +78,9 @@ function intal()
     leftRightBuffer=0;
     setObject();
     displayBoard();
-    timer();
+    setTimer();
     render();
 }
-
 function render()
 {
     for(let x=4;x<boardArry.length;x++)
@@ -97,7 +91,6 @@ function render()
         }
     }
 }
-
 function displayBoard()
 {
     grab('start-game').style.display='none';
@@ -114,26 +107,23 @@ function displayBoard()
         }
     }
 }
-
-
 function grab(name)
 {
     return document.getElementById(name);
 }
-
-function timer()
+function setTimer()
 {
- timer = setInterval(play,525-(level*25));
+ timer = setInterval(play,(125-(lines*2.5)));
 }
 function controller(e)
 {
-if(e.code=="KeyA"){currentDroppingObj['y'][currentDroppingObj.ymin]>0 ? leftRightBuffer=-1 : leftRightBuffer=0}
-if(e.code=="KeyD"){currentDroppingObj['y'][currentDroppingObj.ymax]<9 ? leftRightBuffer=1 : leftRightBuffer=0}
+if(e.code=="KeyA"){leftRightBuffer=-1}
+if(e.code=="KeyD"){leftRightBuffer=1}
 }
 function setObject()
 {
-    rng = ((Math.floor(Math.random() * 100))%6)+1;
-    currentDroppingObj = Objects[rng];
+    rng = ((Math.floor(Math.random() * 100))%7);
+    Object.assign(currentDroppingObj,Objects[rng]);
 }
 function clearOjc(obj)
 {
@@ -149,7 +139,7 @@ function placeObj(obj, y)
         boardArry[obj['x'][x]][obj['y'][x]]=y;
     }
 }
-function checkCollision(obj)
+function checkDropCollision(obj)
 {
     obj['x'] = obj['x'].map(x =>x+1)
     for(let x=0; x<4;x++)
@@ -157,34 +147,42 @@ function checkCollision(obj)
         if(obj['x'][x]>23||boardArry[obj['x'][x]][obj['y'][x]]==1)
         {
             obj['x'] = obj['x'].map(x =>x-1);
-            clearOjc(obj);
             placeObj(obj, 1);
-            render();
             setObject();
             return true;
         }
         
     }
 }
-function dropper(obj)
+function checkHorizontalCollision(obj)
 {
-//add checker to setOnes and add a colide detector    
+    obj['y']=obj['y'].map(y =>y+leftRightBuffer);
+    for(let x=0; x<4;x++)
+    {
+        if(obj['y'][x]>9|| obj['y'][x]<0||
+        boardArry[obj['x'][x]][obj['y'][x]]==1)
+        {
+            obj['y'] = obj['y'].map(y =>y-leftRightBuffer);
+        }
+    }
+    leftRightBuffer=0;
+}
+
+function dropper(obj)
+{ 
     clearOjc(obj);  
     collision=false;
-    dropBuffer ? collision=checkCollision(obj):'';
-    obj['y']=obj['y'].map(y =>y+leftRightBuffer);
-    leftRightBuffer=0;
+    if(dropBuffer)collision=checkDropCollision(obj);
+    checkHorizontalCollision(obj);
     if(collision){return}
     placeObj(obj,2);
     render();
     dropBuffer=!dropBuffer;
 }
+
+
 // functions that still need work
 
-function checkLines()
-{
-    
-}
 function play()
 {
     dropper(currentDroppingObj);
