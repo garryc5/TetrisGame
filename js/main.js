@@ -61,7 +61,7 @@ const Objects=
 
 }
 /*----- app's state (variables) -----*/ 
-let level,score, boardArry,currentDroppingObj, leftRightBuffer, dropBuffer, rng;
+let level,score, boardArry,currentDroppingObj, leftRightBuffer, dropBuffer, rng,collision;
 var timer;
 /*----- cached element references -----*/ 
 
@@ -78,8 +78,10 @@ function intal()
     boardArry[x].fill(0,0,10);
     }
     score = 0;
+    dropBuffer = false;
+    collision = false;
     leftRightBuffer=0;
-    currentDroppingObj =setObject();
+    setObject();
     displayBoard();
     timer();
     render();
@@ -131,33 +133,58 @@ if(e.code=="KeyD"){currentDroppingObj['y'][currentDroppingObj.ymax]<9 ? leftRigh
 function setObject()
 {
     rng = ((Math.floor(Math.random() * 100))%6)+1;
-    return Objects[rng];
+    currentDroppingObj = Objects[rng];
 }
-
-
-
-// functions that still need work
-function dropper(obj)
-{
-//add checker to setOnes and add a colide detector    
-if(dropBuffer)
+function clearOjc(obj)
 {
     for(let x=0;x<4;x++)
     {
         boardArry[obj['x'][x]][obj['y'][x]]=0;
-    }    
-    obj['x'] = obj['x'].map(x =>x+1);
-    obj['y']=obj['y'].map(y =>y+leftRightBuffer);
-    leftRightBuffer=0;
+    }  
+}
+function placeObj(obj, y)
+{
     for(let x=0;x<4;x++)
     {
-        boardArry[obj['x'][x]][obj['y'][x]]=2;
+        boardArry[obj['x'][x]][obj['y'][x]]=y;
     }
 }
+function checkCollision(obj)
+{
+    obj['x'] = obj['x'].map(x =>x+1)
+    for(let x=0; x<4;x++)
+    {
+        if(obj['x'][x]>23||boardArry[obj['x'][x]][obj['y'][x]]==1)
+        {
+            obj['x'] = obj['x'].map(x =>x-1);
+            clearOjc(obj);
+            placeObj(obj, 1);
+            render();
+            setObject();
+            return true;
+        }
+        
+    }
+}
+function dropper(obj)
+{
+//add checker to setOnes and add a colide detector    
+    clearOjc(obj);  
+    collision=false;
+    dropBuffer ? collision=checkCollision(obj):'';
+    obj['y']=obj['y'].map(y =>y+leftRightBuffer);
+    leftRightBuffer=0;
+    if(collision){return}
+    placeObj(obj,2);
     render();
     dropBuffer=!dropBuffer;
 }
+// functions that still need work
 
+function checkLines()
+{
+    
+}
 function play()
 {
     dropper(currentDroppingObj);
