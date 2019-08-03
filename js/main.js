@@ -14,13 +14,54 @@ const Objects=
     {
         x:[1,1,0,0],
         y:[4,5,4,5],
-        ymin : 1,
-        ymax : 2,
+        ymin : 0,
+        ymax : 1,
         name: 'square'
     },
+    2:
+    {
+        x:[1,1,0,0],
+        y:[4,5,5,6],
+        ymin : 0,
+        ymax : 3,
+        name: 'fw-z'
+    },
+    3:
+    {
+        x:[1,1,0,0],
+        y:[5,4,4,3],
+        ymin : 3,
+        ymax : 0,
+        name: 'bw-z'
+    },
+    4:
+    {
+        x:[2,2,1,0],
+        y:[5,4,4,4],
+        ymin : 1,
+        ymax : 0,
+        name: 'fw-l'
+    },
+    5:
+    {
+        x:[2,2,1,0],
+        y:[3,4,4,4],
+        ymin : 0,
+        ymax : 3,
+        name: 'bc-l'
+    },
+    6:
+    {
+        x:[1,1,1,0],
+        y:[3,4,5,4],
+        ymin : 0,
+        ymax : 2,
+        name: 't'
+    },
+
 }
 /*----- app's state (variables) -----*/ 
-let level,score, boardArry,currentDroppingObj, leftRightBuffer, dropBuffer;
+let level,score, boardArry,currentDroppingObj, leftRightBuffer, dropBuffer, rng;
 var timer;
 /*----- cached element references -----*/ 
 
@@ -38,10 +79,10 @@ function intal()
     }
     score = 0;
     leftRightBuffer=0;
-    currentDroppingObj =setObject(1);
+    currentDroppingObj =setObject();
     displayBoard();
-    render();
     timer();
+    render();
 }
 
 function render()
@@ -84,9 +125,13 @@ function timer()
 }
 function controller(e)
 {
-    console.log(e.code);
 if(e.code=="KeyA"){currentDroppingObj['y'][currentDroppingObj.ymin]>0 ? leftRightBuffer=-1 : leftRightBuffer=0}
-if(e.code=="KeyD"){currentDroppingObj['y'][currentDroppingObj.ymin]<9 ? leftRightBuffer=1 : leftRightBuffer=0}
+if(e.code=="KeyD"){currentDroppingObj['y'][currentDroppingObj.ymax]<9 ? leftRightBuffer=1 : leftRightBuffer=0}
+}
+function setObject()
+{
+    rng = ((Math.floor(Math.random() * 100))%6)+1;
+    return Objects[rng];
 }
 
 
@@ -94,11 +139,7 @@ if(e.code=="KeyD"){currentDroppingObj['y'][currentDroppingObj.ymin]<9 ? leftRigh
 // functions that still need work
 function dropper(obj)
 {
-//add checker to setOnes and add a colide detector
-for(let x=0;x<4;x++)
-{
-    obj['y']=obj['y'].map(y =>y+leftRightBuffer);
-}
+//add checker to setOnes and add a colide detector    
 if(dropBuffer)
 {
     for(let x=0;x<4;x++)
@@ -106,18 +147,17 @@ if(dropBuffer)
         boardArry[obj['x'][x]][obj['y'][x]]=0;
     }    
     obj['x'] = obj['x'].map(x =>x+1);
+    obj['y']=obj['y'].map(y =>y+leftRightBuffer);
+    leftRightBuffer=0;
     for(let x=0;x<4;x++)
     {
-        boardArry[obj['x'][x]][obj['y'][x]]=1;
+        boardArry[obj['x'][x]][obj['y'][x]]=2;
     }
 }
+    render();
     dropBuffer=!dropBuffer;
 }
-function setObject(x)
-{
-    //add rng to pick obj remove x
-    return Objects[x];
-}
+
 function play()
 {
     dropper(currentDroppingObj);
