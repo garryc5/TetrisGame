@@ -1,4 +1,5 @@
-body
+
+main
 {
     display: flex;
     justify-content: center;
@@ -25,4 +26,14 @@ body
  border: 3px solid rgb(100, 247, 59);
  color: rgb(59, 247, 235);
  font-size: 78px;
+}
+#next-obj
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3,1fr);
+}
+h1
+{
+    text-align: center;
 }

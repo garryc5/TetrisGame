@@ -55,9 +55,10 @@ const Objects=
 
 }
 /*----- app's state (variables) -----*/ 
-let lines,score,boardArry, leftRightBuffer, dropBuffer, rng,collision;
+let lines,score,boardArry,bufferArry, leftRightBuffer, dropBuffer, rng,collision;
 var timer;
 let currentDroppingObj= {};
+let bufferObj = {};
 /*----- cached element references -----*/ 
 
 /*----- event listeners -----*/ 
@@ -65,18 +66,25 @@ document.addEventListener('keypress',controller);
 /*----- functions -----*/
 function intal()
 {
-    lines = 1;
+    lines = 0;
     boardArry= new Array(24);
     for(let x=0;x<24;x++)
     {
     boardArry[x]= new Array(10);
     boardArry[x].fill(0,0,10);
     }
-    score = 0;
+    bufferArry = new Array(3);
+    for(let x=0;x<3;x++)
+    {
+    bufferArry[x]= new Array(3);
+    bufferArry[x].fill(0,0,3);
+    }
+    score = -40;
     dropBuffer = false;
     collision = false;
     leftRightBuffer=0;
-    setObject();
+    setObject(currentDroppingObj);
+    setObject(bufferObj);
     displayBoard();
     setTimer();
     render();
@@ -90,6 +98,8 @@ function render()
             grab(`${x}${y}`).style.backgroundColor = Colors[boardArry[x][y]];
         }
     }
+    grab('score').textContent = `Score: ${score}`;
+    grab('lines').textContent = `Lines: ${lines}`;
 }
 function displayBoard()
 {
@@ -120,23 +130,24 @@ function controller(e)
 if(e.code=="KeyA"){leftRightBuffer=-1}
 if(e.code=="KeyD"){leftRightBuffer=1}
 }
-function setObject()
+function setObject(obj)
 {
     rng = ((Math.floor(Math.random() * 100))%7);
-    Object.assign(currentDroppingObj,Objects[rng]);
+    Object.assign(obj,Objects[rng]);
+    score+=40;
 }
-function clearOjc(obj)
+function clearOjc(obj,Arry)
 {
     for(let x=0;x<4;x++)
     {
-        boardArry[obj['x'][x]][obj['y'][x]]=0;
+        Arry[obj['x'][x]][obj['y'][x]]=0;
     }  
 }
-function placeObj(obj, y)
+function placeObj(obj, y,Arry)
 {
     for(let x=0;x<4;x++)
     {
-        boardArry[obj['x'][x]][obj['y'][x]]=y;
+        Arry[obj['x'][x]][obj['y'][x]]=y;
     }
 }
 function checkDropCollision(obj)
@@ -147,8 +158,11 @@ function checkDropCollision(obj)
         if(obj['x'][x]>23||boardArry[obj['x'][x]][obj['y'][x]]==1)
         {
             obj['x'] = obj['x'].map(x =>x-1);
-            placeObj(obj, 1);
-            setObject();
+            placeObj(obj, 1,boardArry);
+            checkBoard(boardArry);
+            Object.assign(currentDroppingObj,bufferObj);
+            setObject(bufferObj);
+            
             return true;
         }
         
@@ -167,22 +181,36 @@ function checkHorizontalCollision(obj)
     }
     leftRightBuffer=0;
 }
-
 function dropper(obj)
 { 
-    clearOjc(obj);  
+    clearOjc(obj,boardArry);  
     collision=false;
     if(dropBuffer)collision=checkDropCollision(obj);
     checkHorizontalCollision(obj);
     if(collision){return}
-    placeObj(obj,2);
+    placeObj(obj,2,boardArry);
     render();
     dropBuffer=!dropBuffer;
 }
-
-
-// functions that still need work
-
+function checkBoard(board)
+{
+    for(let x= board.length-1;x>=0;x--)
+    {
+        if(board[x].every(x=>x==1))
+        {
+            board.splice(x,1);
+            lines++;
+            board.unshift(new Array(10));
+            score+=100;
+        }
+        if(x<4&&(board[x].find(x=>x==1)))
+        {
+            clearInterval(timer);
+            alert(`game over\nscore: ${score}\nlines: ${lines}`);
+            return
+        }
+    }
+}
 function play()
 {
     dropper(currentDroppingObj);
