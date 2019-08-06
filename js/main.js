@@ -55,7 +55,7 @@ const Objects=
 
 }
 /*----- app's state (variables) -----*/ 
-let lines,score,boardArry,bufferArry, leftRightBuffer, dropBuffer, rng,collision;
+let lines,score,boardArry,bufferArry, leftRightBuffer, dropBuffer, rng,collision,rotat;
 var timer;
 let currentDroppingObj= {};
 let bufferObj = {};
@@ -66,6 +66,7 @@ document.addEventListener('keypress',controller);
 /*----- functions -----*/
 function intal()
 {
+    rotat =0;
     lines = 0;
     boardArry= new Array(24);
     for(let x=0;x<24;x++)
@@ -73,11 +74,11 @@ function intal()
     boardArry[x]= new Array(10);
     boardArry[x].fill(0,0,10);
     }
-    bufferArry = new Array(3);
-    for(let x=0;x<3;x++)
+    bufferArry = new Array(4);
+    for(let x=0;x<4;x++)
     {
-    bufferArry[x]= new Array(3);
-    bufferArry[x].fill(0,0,3);
+    bufferArry[x]= new Array(10);
+    bufferArry[x].fill(0,0,10);
     }
     score = -40;
     dropBuffer = false;
@@ -85,6 +86,7 @@ function intal()
     leftRightBuffer=0;
     setObject(currentDroppingObj);
     setObject(bufferObj);
+    placeObj(bufferObj,2,bufferArry);
     displayBoard();
     setTimer();
     render();
@@ -98,6 +100,13 @@ function render()
             grab(`${x}${y}`).style.backgroundColor = Colors[boardArry[x][y]];
         }
     }
+    for(let x=0;x<bufferArry.length;x++)
+    {
+        for(let y=3;y<7;y++)
+        {
+            grab(`buffer${x}${y}`).style.backgroundColor = Colors[bufferArry[x][y]];
+        }
+    }
     grab('score').textContent = `Score: ${score}`;
     grab('lines').textContent = `Lines: ${lines}`;
 }
@@ -105,6 +114,7 @@ function displayBoard()
 {
     grab('start-game').style.display='none';
     grab('tetris').style.display='grid';
+    grab('score-board').style.display = 'flex';
     let child;
     for(let x=4;x<boardArry.length;x++)
     {
@@ -116,6 +126,17 @@ function displayBoard()
             grab('tetris').appendChild(child);
         }
     }
+
+    for(let x=0;x<bufferArry.length;x++)
+    {
+        for(let y=3;y<7;y++)
+        {
+            child =document.createElement(`div`);
+            child.setAttribute('id', `buffer${x}${y}`);
+            child.setAttribute('class', `grid-square`);
+            grab('next-obj').appendChild(child);
+        }
+    }
 }
 function grab(name)
 {
@@ -123,12 +144,27 @@ function grab(name)
 }
 function setTimer()
 {
- timer = setInterval(play,(125-(lines*2.5)));
+ timer = setInterval(play,(225-(lines*2.5)));
 }
 function controller(e)
 {
 if(e.code=="KeyA"){leftRightBuffer=-1}
 if(e.code=="KeyD"){leftRightBuffer=1}
+if(e.code=='KeyS'){dropBuffer=true}
+if(e.code=='KeyR')
+{
+    clearOjc(currentDroppingObj,boardArry);
+    rotat++;
+    rotationObj(currentDroppingObj);
+    if(rotationCheck(currentDroppingObj))
+    {
+        for(let x=0;x<3;x++)
+        {
+            rotat++;
+            rotationObj(currentDroppingObj);
+        }
+    }
+}
 }
 function setObject(obj)
 {
@@ -161,8 +197,10 @@ function checkDropCollision(obj)
             placeObj(obj, 1,boardArry);
             checkBoard(boardArry);
             Object.assign(currentDroppingObj,bufferObj);
+            clearOjc(bufferObj,bufferArry);
             setObject(bufferObj);
-            
+            placeObj(bufferObj,2,bufferArry);
+            rotat =0;
             return true;
         }
         
@@ -199,9 +237,12 @@ function checkBoard(board)
         if(board[x].every(x=>x==1))
         {
             board.splice(x,1);
-            lines++;
+            lines+=.5;
+            x--;
             board.unshift(new Array(10));
-            score+=100;
+            score+=50;
+            clearInterval(timer);
+            setTimer();
         }
         if(x<4&&(board[x].find(x=>x==1)))
         {
@@ -215,4 +256,120 @@ function play()
 {
     dropper(currentDroppingObj);
     render();
+}
+function rotationObj(obj)
+{
+    if(obj.name==='square'){return}
+    if (obj.name==='bc-l'&&rotat%4==1)
+    {
+        obj.x[0]--;obj.y[0]++;
+        obj.x[2]++;obj.y[2]++;
+        obj.x[3]+=2;obj.y[3]+=2;
+    }
+    if(obj.name==='bc-l'&&rotat%4==2)
+    {
+        currentDroppingObj.x[0]++;obj.y[0]++;
+        obj.x[2]++;obj.y[2]--;
+        obj.x[3]+=2;obj.y[3]-=2;
+    }   
+     if(obj.name==='bc-l'&&rotat%4==3)
+    {
+        obj.x[0]++;obj.y[0]--;
+        obj.x[2]--;obj.y[2]--;
+        obj.x[3]-=2;obj.y[3]-=2;
+    }
+    if(obj.name==='bc-l'&&rotat%4==0)
+    {
+        obj.x[0]--;obj.y[0]--;
+        obj.x[2]--;obj.y[2]++;
+        obj.x[3]-=2;obj.y[3]+=2;
+    }
+    if(obj.name==='bw-z'&&rotat%2==1)
+    {
+        obj.y[3]+=2;obj.x[2]+=2;
+    }
+    if(obj.name==='bw-z'&&rotat%2==0)
+    {
+        obj.y[3]-=2;obj.x[2]-=2;
+    }
+    if(obj.name==='fw-z'&&rotat%2==1)
+    {
+        obj.y[3]-=2;obj.x[2]+=2;
+    }
+    if(obj.name==='fw-z'&&rotat%2==0)
+    {
+        obj.y[3]+=2;obj.x[2]-=2;
+    }
+    if(currentDroppingObj.name==='fw-l'&&rotat%4==1)
+    {
+        obj.x[0]++;obj.y[0]--;
+        obj.x[2]++;obj.y[2]++;
+        obj.x[3]+=2;obj.y[3]+=2;
+    }
+    if(currentDroppingObj.name==='fw-l'&&rotat%4==2)
+    {
+        obj.x[0]--;obj.y[0]--;
+        obj.x[2]++;obj.y[2]--;
+        obj.x[3]+=2;obj.y[3]-=2;
+    }
+    if(currentDroppingObj.name==='fw-l'&&rotat%4==3)
+    {
+        obj.x[0]--;obj.y[0]++;
+        obj.x[2]--;obj.y[2]--;
+        obj.x[3]-=2;obj.y[3]-=2;
+    }
+    if(currentDroppingObj.name==='fw-l'&&rotat%4==0)
+    {
+        obj.x[0]++;obj.y[0]++;
+        obj.x[2]--;obj.y[2]++;
+        obj.x[3]-=2;obj.y[3]+=2;
+    }
+    if(obj.name==='line'&&rotat%2==1)
+    {
+        obj.x[3]--;obj.y[3]--;
+        obj.x[1]++;obj.y[1]++;
+        obj.x[0]+=2;obj.y[0]+=2;        
+    }
+    if(obj.name==='line'&&rotat%2==0)
+    {
+        obj.x[1]--;obj.y[1]--;
+        obj.x[3]++;obj.y[3]++;
+        obj.x[0]-=2;obj.y[0]-=2;        
+    }
+    if(obj.name==='t'&&rotat%4==1)
+    {
+        obj.x[0]--;obj.y[0]++;
+        obj.x[3]++;obj.y[3]++;  
+        obj.x[2]++;obj.y[2]--;   
+    }
+    if(obj.name==='t'&&rotat%4==2)
+    {
+        obj.x[3]++;obj.y[3]--;
+        obj.x[0]++;obj.y[0]++;  
+        obj.x[2]--;obj.y[2]--;  
+    }
+    if(obj.name==='t'&&rotat%4==3)
+    {
+        obj.x[0]++;obj.y[0]--;
+        obj.x[3]--;obj.y[3]--;  
+        obj.x[2]--;obj.y[2]++;  
+    }
+    if(obj.name==='t'&&rotat%4==0)
+    {
+        obj.x[0]--;obj.y[0]--;
+        obj.x[3]--;obj.y[3]++;  
+        obj.x[2]++;obj.y[2]++;  
+    }
+}
+function rotationCheck(obj)
+{
+    for(let x =0;x<4;x++)
+    {
+        if(obj['y'][x]<0 ||
+         obj['y'][x]>9||
+         boardArry[obj['x'][x]][obj['y'][x]]==1 )
+            {
+                return true;
+            }
+    }
 }
