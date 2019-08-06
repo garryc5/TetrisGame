@@ -10,22 +10,29 @@
 </head>
 <body>
     <h1>Tetris</h1>
-    <main>
+    <main id="board">
     <aside id = 'score-board'>
         <p id = 'score'></p>
         <p id ='lines'></p>
         <div id='next-obj'></div>
+        <button id="play-again" onclick="reset()">Play Again</button>
         <div id= 'controls'>
-        <h3>Controls</h6>
-        <p>A = Left</p>
-        <p>D = right</p>
-        <p>S = Down</p>
-        <p>R = rotate</p>
+            <h3>Controls</h6>
+            <p>A = Left</p>
+            <p>D = right</p>
+            <p>S = Down</p>
+            <p>R = rotate</p>
         </div>
     </aside>
     <div id="tetris">
         <button id='start-game' onclick="intal()">Start</button>
     </div>
 </main>
+<div id="moblie-controlls">
+    <button onclick="leftRightBuffer=-1">&#171;</button>
+    <button onclick="dropBuffer=true">&#166;</button>
+    <button onclick="rotation()">&#167;</button>
+    <button onclick="leftRightBuffer=1">&#187;</button>    
+</div>
 </body>
 </html>

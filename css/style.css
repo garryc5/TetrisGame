@@ -1,6 +1,37 @@
-
+ *
+ {
+     box-sizing: border-box;
+     margin: 0;
+ }
+body
+{
+    background-color: lightslategray;
+}
+ #moblie-controlls
+    {
+        display: none;
+        height: 15vmin;
+        width: 390px;
+        text-align: center;
+        margin: auto;
+        background-color: rgb(55, 59, 59);
+        border: 5px solid black;
+    }
+    #moblie-controlls button
+{
+    width: 75px;
+    height: 10vmin;
+    font-size: 25px;
+    border: 3px solid lightgreen;
+    border-radius: 20%;
+    background-color: gray;
+    margin: 0;
+    padding: 0;
+}
 main
 {
+    margin: auto;
+    width: 390px;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -18,8 +49,8 @@ main
 {
     border: 1px solid rgb(55, 59, 59);
     border-radius: 20%;
-    height: 20px;
-    width: 20px;
+    height: 25px;
+    width: 25px;
 }
 #start-game
 {
@@ -27,25 +58,60 @@ main
  color: rgb(59, 247, 235);
  font-size: 78px;
 }
+#play-again
+{
+    display: none;
+    border: 3px solid rgb(100, 247, 59);
+    color: rgb(59, 247, 235);
+    font-size: 20px;
+    background-color: white;
+}
 #next-obj
 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4,1fr);
+    grid-template-rows: repeat(4,1fr); 
     grid-gap: 1px;
     border: 3px solid black;
     background-color: rgb(55, 59, 59);
 }
 h1
 {
+    margin: auto;
+    width: 390px;
     text-align: center;
+    background-color: white;
+    border: 3px solid black;
+    color:black;
+    font-size: 50px;
 }
 #score-board
 {
+    width: 121px;
     background-color: rgb(105, 105, 105);
     border: 5px solid black;
     color: aqua;
     display: none;
     flex-direction: column;
     align-items: center;
+}
+#controls
+{
+    display: none;
+}
+@media only screen and (min-width: 600px)
+{
+#moblie-controlls button
+{
+    display: none;
+}
+#moblie-controlls
+{
+    visibility: hidden;
+}
+#controls
+{
+    display: block;
+}
+
 }

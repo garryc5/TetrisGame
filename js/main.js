@@ -1,12 +1,10 @@
-/*notes to self 
-* board 10x20 but add 4 buffer on the hight */
-
 /*----- constants -----*/ 
 const Colors =
 {
     0 : 'rgb(75,79,79)',
     1 : 'rgb(245,245,245)',
-    2 : 'rgb(145,245,145)'
+    2 : 'rgb(145,245,145)',
+    3 : 'aqua'
 };
 const Objects=
 {
@@ -137,6 +135,9 @@ function displayBoard()
             grab('next-obj').appendChild(child);
         }
     }
+        grab('moblie-controlls').style.display='block';
+        grab('next-obj').style.visibility ='visible';
+        grab('play-again').style.display='none';
 }
 function grab(name)
 {
@@ -144,7 +145,7 @@ function grab(name)
 }
 function setTimer()
 {
- timer = setInterval(play,(225-(lines*2.5)));
+ timer = setInterval(play,(200-(lines*10)));
 }
 function controller(e)
 {
@@ -153,17 +154,7 @@ if(e.code=="KeyD"){leftRightBuffer=1}
 if(e.code=='KeyS'){dropBuffer=true}
 if(e.code=='KeyR')
 {
-    clearOjc(currentDroppingObj,boardArry);
-    rotat++;
-    rotationObj(currentDroppingObj);
-    if(rotationCheck(currentDroppingObj))
-    {
-        for(let x=0;x<3;x++)
-        {
-            rotat++;
-            rotationObj(currentDroppingObj);
-        }
-    }
+    rotation()
 }
 }
 function setObject(obj)
@@ -229,25 +220,28 @@ function dropper(obj)
     placeObj(obj,2,boardArry);
     render();
     dropBuffer=!dropBuffer;
+    clearInterval(timer);
+    setTimer();
 }
 function checkBoard(board)
 {
-    for(let x= board.length-1;x>=0;x--)
+    for(let x= board.length-1;x>=0;--x)
     {
-        if(board[x].every(x=>x==1))
+        if(board[x].every(y=>y==1))
         {
             board.splice(x,1);
-            lines+=.5;
-            x--;
             board.unshift(new Array(10));
-            score+=50;
-            clearInterval(timer);
-            setTimer();
+            board[0].fill(0,0,10);
+            lines++;
+            score+=100;
+            console.log(x);
+            x++;
         }
-        if(x<4&&(board[x].find(x=>x==1)))
+        if(x==3&&(board[x].find(x=>x==1)))
         {
             clearInterval(timer);
-            alert(`game over\nscore: ${score}\nlines: ${lines}`);
+            gameOver();
+            // alert(`game over\nscore: ${score}\nlines: ${lines}`);
             return
         }
     }
@@ -366,10 +360,42 @@ function rotationCheck(obj)
     for(let x =0;x<4;x++)
     {
         if(obj['y'][x]<0 ||
-         obj['y'][x]>9||
+         obj['y'][x]>9|| obj['x'][x]>23 ||
          boardArry[obj['x'][x]][obj['y'][x]]==1 )
             {
                 return true;
             }
     }
+}
+function rotation()
+{
+    clearOjc(currentDroppingObj,boardArry);
+    rotat++;
+    rotationObj(currentDroppingObj);
+    if(rotationCheck(currentDroppingObj))
+    {
+        for(let x=0;x<3;x++)
+        {
+            rotat++;
+            rotationObj(currentDroppingObj);
+        }
+    }
+}
+function gameOver()
+{
+    grab('tetris').style.display = 'none';
+    grab('moblie-controlls').style.display = 'none';
+    grab('next-obj').style.visibility ='hidden';
+    grab('play-again').style.display = 'block';
+}
+function reset()
+{
+    let toRemove = document.querySelectorAll('.grid-square');
+    toRemove.forEach(function(node)
+    {
+        node.remove();
+    });
+    boardArry = undefined;
+    bufferArry = undefined;
+    intal();
 }
