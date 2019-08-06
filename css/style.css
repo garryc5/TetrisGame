@@ -7,7 +7,7 @@ body
 {
     background-color: lightslategray;
 }
- #moblie-controlls
+#moblie-controlls
     {
         display: none;
         height: 15vmin;
@@ -17,7 +17,7 @@ body
         background-color: rgb(55, 59, 59);
         border: 5px solid black;
     }
-    #moblie-controlls button
+#moblie-controlls button
 {
     width: 75px;
     height: 10vmin;
@@ -113,5 +113,4 @@ h1
 {
     display: block;
 }
-
 }
