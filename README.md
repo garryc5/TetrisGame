@@ -16,7 +16,6 @@ r: spin
 ### Preveiw Images
 ![Preview-1](imgs/screenShot1.png)
 ![Preview-2](imgs/screenShot2.png)
-![wireFrame](https://wireframe.cc/XEcDQu)
 ### Next Steps 
 * aniemate the game over screen 
 * work on the make more conpatable with older phones
