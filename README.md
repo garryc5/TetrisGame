@@ -16,3 +16,4 @@ r: spin
 ### Preveiw Images
 ![Preview-1](imgs/screenShot1.png)
 ![Preview-2](imgs/screenShot2.png)
+https://wireframe.cc/XEcDQu
