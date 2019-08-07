@@ -18,4 +18,3 @@ r: spin
 ![Preview-2](imgs/screenShot2.png)
 ### Next Steps 
 * aniemate the game over screen 
-* work on the make more conpatable with older phones
