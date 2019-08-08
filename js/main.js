@@ -238,7 +238,6 @@ function checkBoard(board) {
             board.unshift(new Array(10));
             board[0].fill(0, 0, 10);
             lines++;
-            confetti.start(15000);
             score += 100;
             x++;
         }
@@ -254,7 +253,6 @@ function checkBoard(board) {
 }
 function play() {
     dropper(currentDroppingObj);
-    confetti.stop();
     render();
 }
 function rotationObj(obj) {
