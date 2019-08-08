@@ -397,6 +397,7 @@ function rotationCheck(obj) {
 
 }
 function rotation() {
+    if(currentDroppingObj.x.find(x =>{x==0})){return}
     clearOjc(currentDroppingObj, boardArry);
     rotat++;
     rotationObj(currentDroppingObj);
