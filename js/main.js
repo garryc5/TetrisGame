@@ -58,6 +58,7 @@ let score;
 let boardArry;
 let bufferArry;
 let leftRightBuffer;
+let rotatBuffer;
 let dropBuffer;
 let rng;
 let collision;
@@ -84,7 +85,7 @@ function intal() {
     bufferArry[x] = new Array(10);
     bufferArry[x].fill(0,0,10);
     }
-
+    rotatBuffer = false;
     score = -40;
     dropBuffer = false;
     collision = false;
@@ -161,7 +162,7 @@ function controller(e) {
 if(e.code == "KeyA"){leftRightBuffer = -1}
 if(e.code == "KeyD"){leftRightBuffer = 1}
 if(e.code == 'KeyS'){dropBuffer = true}
-if(e.code == 'KeyR'){rotation()}
+if(e.code == 'KeyR'){rotatBuffer = true}
 
 }
 function setObject(obj) {
@@ -220,12 +221,14 @@ function checkHorizontalCollision(obj) {
 function dropper(obj) { 
     clearOjc(obj, boardArry);  
     collision = false;
+    if(rotatBuffer){rotation()}
     if(dropBuffer) collision = checkDropCollision(obj);
     checkHorizontalCollision(obj);
     if(collision){return}
     placeObj(obj, 2, boardArry);
     render();
     dropBuffer = !dropBuffer;
+    rotatBuffer = false;
     clearInterval(timer);
     setTimer();
 }
