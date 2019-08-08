@@ -221,10 +221,10 @@ function checkHorizontalCollision(obj) {
 function dropper(obj) { 
     clearOjc(obj, boardArry);  
     collision = false;
-    if(rotatBuffer){rotation()}
     if(dropBuffer) collision = checkDropCollision(obj);
     checkHorizontalCollision(obj);
     if(collision){return}
+    if(rotatBuffer){rotation()}
     placeObj(obj, 2, boardArry);
     render();
     dropBuffer = !dropBuffer;
