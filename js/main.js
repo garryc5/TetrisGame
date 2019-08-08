@@ -351,7 +351,6 @@ function rotationObj(obj) {
         obj.x[3]++; obj.y[3]++;
         obj.x[0] -= 2; obj.y[0] -= 2;        
     }
-
     if(obj.name === 't' && rotat %4 == 1)
     {
         obj.x[0]--; obj.y[0]++;
