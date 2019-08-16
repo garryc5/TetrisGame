@@ -1,5 +1,5 @@
 # TetrisGame
-### Desscription
+### Description
 A game of tetris using js css and html. It is designed to play fast by making the drop unmanagable by filling 15 lines.
 ### Playing
 [gameplay](https://garryc5.github.io/TetrisGame/)
@@ -11,10 +11,10 @@ a: left
 s: down
 d: right
 r: spin
-### Mit license
+### MIT license
 ^^I think go nuts.
-### Preveiw Images
+### Preview Images
 ![Preview-1](imgs/screenShot1.png)
 ![Preview-2](imgs/screenShot2.png)
 ### Next Steps 
-* aniemate the game over screen 
+* animate the game over screen 
