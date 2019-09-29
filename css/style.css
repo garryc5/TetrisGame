@@ -1,8 +1,14 @@
  *
  {
+<<<<<<< HEAD
     touch-action: manipulation;
     box-sizing: border-box;
     margin: 0;
+=======
+     box-sizing: border-box;
+     margin: 0;
+     touch-action: manipulation;
+>>>>>>> a79854b4a06f9c7440748e0598deefe85b40d93a
  }
 body
 {

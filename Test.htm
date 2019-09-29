@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)http://localhost:3000/new? -->
+<html class="gr__localhost"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Test</title>
+    <link rel="stylesheet" href="./Test_files/style.css">
+  </head>
+  <body data-gr-c-s-loaded="true">
+<nav>
+    <h1>Survey To Api</h1>
+  
+    <a href="http://localhost:3000/logout"> garrett carver  Log Out</a>
+  
+</nav>
+
+<script src="./Test_files/addQuestions.js"></script>
+
+<h1>Making new survey</h1>
+<form action="http://localhost:3000/" method="POST" id="addToSurvey">
+    <label>Survey Name: 
+    <input type="text" name="name" placeholder="Required" required=""></label>
+    <div id="lastQuestion">
+    <label>Question:
+    <input type="text" name="question1" placeholder="Required" required=""></label>
+    <label>Answers:
+    <input type="text" name="a00" placeholder="Required" required=""></label>
+    <input type="text" name="a01" placeholder="Required" required="">
+    <input type="text" name="a02" placeholder="Optional">
+    <input type="text" name="a03" placeholder="Optional">
+    </div>
+    <button>Submit</button>
+</form>
+<button onclick="addQuestions(q); q++">test</button>
+</body></html>

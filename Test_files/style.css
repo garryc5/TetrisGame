@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a
+{
+  color: violet;
+  padding: 2px;
+  border: 2px solid violet;
+  background-color: grey;
+}
+nav
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: dimgray;
+  padding: 5vh 3vw 1vh;
+  width: 94vw;
+  color: aquamarine;
+}
