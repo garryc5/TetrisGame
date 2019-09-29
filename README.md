@@ -17,12 +17,6 @@ r: spin
 ![Preview-1](imgs/screenShot1.png)
 ![Preview-2](imgs/screenShot2.png)
 ### Next Steps 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 * aniemate the game over screen 
-=======
-* aniemate the game over screen 
->>>>>>> a79854b4a06f9c7440748e0598deefe85b40d93a
-=======
-* animate the game over screen 
->>>>>>> e293338257da54499d8d61be1e2d1c47d3181616
+
