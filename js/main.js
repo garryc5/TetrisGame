@@ -1,9 +1,9 @@
 /*----- constants -----*/ 
-const Colors =
+var Colors =
 {
-    0 : 'rgb(75,79,79)',
+    0 : 'rgb(75,79,79,.4)',
     1 : 'rgb(245,245,245)',
-    2 : 'rgb(145,245,145)',
+    2 :  randomColor(),
     3 : 'aqua'
 };
 const Objects=
@@ -167,8 +167,16 @@ if(e.code == 'KeyR'){rotatBuffer = true}
 }
 function setObject(obj) {
     rng = ((Math.floor( Math.random() * 100)) % 7);
+    Colors =
+    {
+    0 : 'rgb(75,79,79,.4)',
+    1 : 'rgb(245,245,245)',
+    2 :  randomColor(),
+    3 : 'aqua'
+    }
     Object.assign(obj, Objects[rng]);
     score += 40;
+
 }
 function clearOjc(obj, Arry) {
     for(let x = 0; x < 4; x++)
@@ -423,4 +431,8 @@ function reset() {
     boardArry = undefined;
     bufferArry = undefined;
     intal();
+}
+function randomColor()
+{
+    return `rgb(${Math.random() * (255)},${Math.random() * (255)},${Math.random() * (255)})`;
 }

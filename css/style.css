@@ -1,19 +1,10 @@
  *
  {
-<<<<<<< HEAD
-    touch-action: manipulation;
-    box-sizing: border-box;
-    margin: 0;
-=======
      box-sizing: border-box;
      margin: 0;
      touch-action: manipulation;
->>>>>>> a79854b4a06f9c7440748e0598deefe85b40d93a
  }
-body
-{
-    background-color: lightslategray;
-}
+
 #moblie-controlls
     {
         display: none;
@@ -48,8 +39,8 @@ main
     display: block;
     grid-template-columns: repeat(10,1fr);
     grid-template-rows: repeat(20,1fr); 
-    background-color: rgb(55, 59, 59);
-    border: 5px solid black;
+    background-color: rgba(55, 59, 59, 0.3);
+    border: 5px solid rgba(0, 0, 0);
     grid-gap: 1px;
 }
 .grid-square
@@ -80,7 +71,7 @@ main
     grid-template-rows: repeat(4,1fr); 
     grid-gap: 1px;
     border: 3px solid black;
-    background-color: rgb(55, 59, 59);
+    background-color: rgb(55, 59, 59,.1);
 }
 h1
 {
@@ -95,7 +86,7 @@ h1
 #score-board
 {
     width: 121px;
-    background-color: rgb(105, 105, 105);
+    background-color: rgb(105, 105, 105,.3);
     border: 5px solid black;
     color: aqua;
     display: none;
